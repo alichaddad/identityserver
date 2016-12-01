@@ -29,7 +29,8 @@
                                    ng-pattern="/^[a-z0-9 \-_]+$/" ng-minlength="3" autofocus
                                    ng-change="vm.validateUsername()" id="login">
                             <div ng-messages="signupform.login.$error" md-auto-hide="false">
-                                <div ng-message="duplicate_username" translate='registration.views.registrationform.usernametaken'>This username has already been taken</div>
+                                <div ng-message="user_exists" translate="username_taken"></div>
+                                <div ng-message="organization_exists" translate="organization_with_name_exists"></div>
                                 <div ng-message="invalid_username_format" translate='registration.views.registrationform.invalidusername'>Invalid username. Only characters a-z, 0-9,
                                     dashes, underscores and space are allowed
                                 </div>

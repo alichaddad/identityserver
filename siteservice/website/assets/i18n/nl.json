@@ -102,11 +102,6 @@
                 "neworg": "Nieue organizatie",
                 "createchild": "Maak een suborganizatie in {{org}}",
                 "createnew": "Maak een nieuwe organizatie",
-                "orgname": "Naam van de organizatie",
-                "orgnameduplicate": "Deze naam is al bezet",
-                "orgnamepattern": "Ongeldige organizatie naam.<br/>Enkel tekens a-z, 0-9, streepjes,<br/>underscores en spaties zijn toegelaten",
-                "orgnameminlength": "Minimum 3 tekens zijn nodig",
-                "orgnamemaxlength": "De naam van de organizatie kan niet langer zijn dan 150 tekens"
             },
             "detail": {
                 "organization": "Organizatie",
@@ -211,6 +206,9 @@
             "missinguserinfo": "Deze gebruiker heeft (een deel van) de gevraagde informatie niet gedeeld:<br />"
         }
     },
+    "organization_name": "Naam van de organizatie",
+    "organization_name_pattern": "Ongeldige organizatie naam.<br/>Enkel tekens a-z, 0-9, streepjes,<br/>underscores en spaties zijn toegelaten"
+    "organization_with_name_exists": "Er bestaat een organizatie met deze naam. Kies een andere naam.",
     "owner": "Eigenaar",
     "owners": "Eigenaars",
     "phone_number": "Telefoonnummer",
@@ -223,7 +221,6 @@
             "registrationform": {
                 "register": "Registreer",
                 "username": "gebruikersnaam",
-                "usernametaken": "Deze gebruikersnaam is al bezet",
                 "invalidusername": "Ongeldige gebruikersnaam. Enkel tekens a-z, 0-9, streepjes, underscores en spaties zijn toegelaten",
                 "email": "Email",
                 "invalidemail": "Ongeldig email adres",
@@ -457,5 +454,7 @@
         }
     },
     "reject": "Weiger",
-    "accept": "Aanvaardt"
+    "accept": "Aanvaardt",
+    "username_taken": "Deze gebruikersnaam is al bezet",
+    "user_with_name_exists": "Er bestaat al een gebruiker met deze naam. Kies een andere naaam."
 }

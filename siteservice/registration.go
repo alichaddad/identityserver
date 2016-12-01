@@ -13,6 +13,7 @@ import (
 	"github.com/itsyouonline/identityserver/credentials/password"
 	"github.com/itsyouonline/identityserver/credentials/totp"
 	"github.com/itsyouonline/identityserver/db"
+	"github.com/itsyouonline/identityserver/db/organization"
 	"github.com/itsyouonline/identityserver/db/user"
 	"github.com/itsyouonline/identityserver/siteservice/website/packaged/html"
 	"github.com/itsyouonline/identityserver/validation"
@@ -294,10 +295,11 @@ func (service *Service) ProcessRegistrationForm(w http.ResponseWriter, request *
 	}
 	newuser := &user.User{
 		Username:       values.Login,
-		EmailAddresses: []user.EmailAddress{user.EmailAddress{Label: "main", EmailAddress: values.Email}},
+		EmailAddresses: []user.EmailAddress{{Label: "main", EmailAddress: values.Email}},
 	}
 	//validate the username is not taken yet
 	userMgr := user.NewManager(request)
+	orgMgr := organization.NewManager(request)
 
 	count, err := userMgr.GetPendingRegistrationsCount()
 	if err != nil {
@@ -320,7 +322,15 @@ func (service *Service) ProcessRegistrationForm(w http.ResponseWriter, request *
 	}
 	if userExists {
 		log.Debug("USER ", newuser.Username, " already registered")
-		http.Error(w, http.StatusText(http.StatusConflict), http.StatusConflict)
+		w.WriteHeader(422)
+		response.Error = "user_exists"
+		json.NewEncoder(w).Encode(&response)
+		return
+	} else if orgMgr.Exists(newuser.Username) {
+		log.Debugf("Cannot create user: organization with globalid %s already exists", newuser.Username)
+		w.WriteHeader(422)
+		response.Error = "organization_exists"
+		json.NewEncoder(w).Encode(&response)
 		return
 	}
 
@@ -378,7 +388,7 @@ func (service *Service) ProcessRegistrationForm(w http.ResponseWriter, request *
 		registrationSession.Values["redirectparams"] = values.RedirectParams
 
 		sessions.Save(request, w)
-		response.Redirecturl = fmt.Sprintf("https://%s/register?"+values.RedirectParams+"#/smsconfirmation", request.Host)
+		response.Redirecturl = fmt.Sprintf("https://%s/register?%s#/smsconfirmation", request.Host, values.RedirectParams)
 		json.NewEncoder(w).Encode(&response)
 		return
 	}
@@ -408,6 +418,7 @@ func (service *Service) ValidateUsername(w http.ResponseWriter, request *http.Re
 		return
 	}
 	userMgr := user.NewManager(request)
+	orgMgr := organization.NewManager(request)
 	userExists, err := userMgr.Exists(username)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
@@ -415,8 +426,15 @@ func (service *Service) ValidateUsername(w http.ResponseWriter, request *http.Re
 	}
 	if userExists {
 		log.Debug("username ", username, " already taken")
-		response.Error = "duplicate_username"
+		response.Error = "user_exists"
 		response.Valid = false
+	} else {
+		orgExists := orgMgr.Exists(username)
+		if orgExists {
+			log.Debugf("Organization with name %s already exists", username)
+			response.Error = "organization_exists"
+			response.Valid = false
+		}
 	}
 	json.NewEncoder(w).Encode(&response)
 	return

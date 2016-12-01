@@ -652,7 +652,7 @@
                         },
                         function (reason) {
                             if (reason.status === 409) {
-                                $scope.form.name.$setValidity('duplicate', false);
+                                $scope.form.name.$setValidity(reason.data.error, false);
                             } else if (reason.status === 400) {
                                 $scope.form.name.$setValidity('pattern', false);
                             }
@@ -670,7 +670,8 @@
             }
 
             function resetValidation() {
-                $scope.form.name.$setValidity('duplicate', true);
+                $scope.form.name.$setValidity('organization_exists', true);
+                $scope.form.name.$setValidity('user_exists', true);
             }
         }
     }

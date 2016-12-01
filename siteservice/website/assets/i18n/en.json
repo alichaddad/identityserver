@@ -102,12 +102,7 @@
             "createorganizationdialog": {
                 "neworg": "New organization",
                 "createchild": "Create a suborganization in {{org}}",
-                "createnew": "Create a new organization",
-                "orgname": "Organization name",
-                "orgnameduplicate": "This name is already taken",
-                "orgnamepattern": "Invalid organization name. <br/>Only characters a-z, 0-9, dashes, <br/>underscores and space are allowed",
-                "orgnameminlength": "Minimum 3 characters are required",
-                "orgnamemaxlength": "The organization name cannot be longer than 150 characters"
+                "createnew": "Create a new organization"
             },
             "detail": {
                 "organization": "Organization",
@@ -212,6 +207,9 @@
             "missinguserinfo": "This user hasn't shared some required information:<br />"
         }
     },
+    "organization_name": "Organization name",
+    "organization_name_pattern": "Invalid organization name. <br/>Only characters a-z, 0-9, dashes, <br/>underscores and space are allowed",
+    "organization_with_name_exists": "An organization with this name exists. Please choose another name.",
     "owner": "Owner",
     "owners": "Owners",
     "phone_number": "Phone number",
@@ -223,7 +221,6 @@
             "registrationform": {
                 "register": "Register",
                 "username": "Username",
-                "usernametaken": "This username has already been taken",
                 "invalidusername": "Invalid username. Only characters a-z, 0-9, dashes, underscores and spaces are allowed",
                 "email": "Email",
                 "invalidemail": "Invalid email address",
@@ -457,5 +454,7 @@
         }
     },
     "reject": "Reject",
-    "accept": "Accept"
+    "accept": "Accept",
+    "username_taken": "This username has already been taken",
+    "user_with_name_exists": "A user with this name already exists. Please pick another name."
 }
