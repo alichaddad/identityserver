@@ -37,6 +37,10 @@ docker-compose up
 
 then browse to https://dev.itsyou.online:8443 (assuming docker runs on localhost)
 
+### Migrations
+
+To run the data migrations install pymongo (`pip install -r requirements.txt`) and run [`./migrate.py`](migrate.py)
+
 ## Contribute
 
 When you want to contribute to the development, follow the [contribution guidelines](contributing.md).
