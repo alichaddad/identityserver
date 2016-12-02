@@ -1,0 +1,39 @@
+<div class="contract">
+    <h1 translate="acknowlegde_contract"></h1>
+    <div ng-if="vm.contract.type">
+        <p ng-bind="::vm.contract.type"></p>
+    </div>
+    <div>
+        <p translate="contract_expires_on_date"
+           translate-values="{ expire_date: vm.getDateString(vm.contract.expires)}"></p>
+    </div>
+    <div ng-if="vm.contract.content.mimeType.startsWith('text')">
+        <p ng-bind="::vm.contract.content.content"></p>
+    </div>
+    <div ng-if="vm.contract.content.mimeType.startsWith('image')">
+        <div ng-click="vm.openImageInTab()" class="clickable-img">
+            <img class="clickable-img"
+                 ng-src="data:{{ ::vm.contract.content.mimeType }};base64,{{ ::vm.contract.content.content }}"/>
+        </div>
+    </div>
+    <div>
+        <h3 class="md-title" translate="involved_parties"></h3>
+        <ul>
+            <li ng-repeat="party in vm.contract.parties track by party.name">
+                <span ng-bind="::vm.getPartyLabel(party.type)"></span>: <span ng-bind="::party.name"></span>
+            </li>
+        </ul>
+    </div>
+    <div ng-if="vm.contract.invalidates.length">
+        <h3 class="md-title" translate="contract_invalidate_following_contracts"></h3>
+        <ul>
+            <li ng-repeat="contractId in vm.contract.invalidates track by $index" ng-bind="::contractId"></li>
+        </ul>
+    </div>
+    <div ng-if="vm.contract.extends.length">
+        <h3 class="md-title" translate="contract_extends_following_contracts"></h3>
+        <ul>
+            <li ng-repeat="contractId in vm.contract.extends track by $index" ng-bind="::contractId"></li>
+        </ul>
+    </div>
+</div>

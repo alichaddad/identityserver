@@ -1,0 +1,145 @@
+<form name="vm.contractform" ng-submit="vm.submit()" novalidate class="contract">
+    <h1>
+        <span ng-if="vm.isNew" translate="create_contract"></span>
+        <span ng-if="!vm.isNew" translate="update_contract"></span>
+    </h1>
+    <div layout="column">
+        <div>
+            <h3 class="md-title" translate="parties"></h3>
+            <div ng-repeat="party in vm.contract.parties" layout="column" layout-gt-sm="row">
+                <md-input-container>
+                    <label translate="party_type"></label>
+                    <md-select name="party_type_{{ $index }}" ng-model="party.type" required style="min-width:200px;">
+                        <md-option ng-repeat="partyType in vm.partyTypes track by partyType.type"
+                                   ng-value="partyType.type" ng-bind="partyType.label"></md-option>
+                    </md-select>
+                </md-input-container>
+                <md-input-container>
+                    <label translate="name"></label>
+                    <input name="party_name_{{ $index }}" ng-model="party.name" type="text" required ng-minlength="2">
+                    <div ng-messages="vm.contractform['party_name_' + $index].$error">
+                        <div ng-message="minlength" translate="min_x_characters_required"
+                             translate-values="{ length: 2 }"></div>
+                        <div ng-message="required" translate="this_field_is_required"></div>
+                    </div>
+                </md-input-container>
+                <div>
+                    <md-button class="md-warn" ng-click="vm.removeParty(party)"
+                               aria-label="{{ ::'remove' | translate }}">
+                        <i class="fa fa-times"></i> <span translate="remove"></span>
+                    </md-button>
+                </div>
+            </div>
+            <div>
+                <md-button ng-click="vm.addParty()" class="md-primary"
+                           aria-label="{{ ::'add_another_party' | translate }}">
+                    <i class="fa fa-plus"></i> <span translate=""></span>
+                </md-button>
+            </div>
+        </div>
+        <div>
+            <h3 class="md-title" translate="contract_type_optional"></h3>
+            <md-input-container>
+                <label translate="contract_type"></label>
+                <input type="text" name="contractType" ng-model="vm.contract.contractType" md-maxlength="40">
+                <div ng-messages="vm.contractform.contractType.$error">
+                    <div ng-message="md-maxlength" translate="maximum_x_charactes_allowed"
+                         translate-values="{ length: 40 }"></div>
+                </div>
+            </md-input-container>
+        </div>
+        <div>
+            <h3 class="md-title" translate="invalidate_contracts"></h3>
+            <p translate="does_contract_invalidate_contracts"></p>
+            <md-chips ng-model="vm.contract.invalidates" md-autocomplete-snap md-require-match="true"
+                      md-transform-chip="vm.transformContractChip($chip)">
+                <md-autocomplete md-search-text="vm.contractSearchTextInvalidates"
+                                 md-items="item in vm.searchContract(vm.contractSearchTextInvalidates)"
+                                 md-item-text="item.contractType|| item.contractId" placeholder="Search for a contract">
+                    <span md-highlight-text="vm.contractSearchTextInvalidates">{{item.contractType || item.contractId}}</span>
+                </md-autocomplete>
+                <md-chip-template>
+                    <strong ng-bind="::vm.getContractDisplayName($chip)"></strong>
+                </md-chip-template>
+            </md-chips>
+        </div>
+        <div>
+            <h3 class="md-title" translate="extend_contracts"></h3>
+            <p translate="does_contract_invalidate_contracts"></p>
+            <md-chips ng-model="vm.contract.extends" md-autocomplete-snap md-require-match="true"
+                      md-transform-chip="vm.transformContractChip($chip)">
+                <md-autocomplete md-search-text="vm.contractSearchTextExisting"
+                                 md-items="item in vm.searchContract(vm.contractSearchTextExisting)"
+                                 md-item-text="item.contractType|| item.contractId" placeholder="Search for a contract">
+                    <span md-highlight-text="vm.contractSearchTextExisting">{{item.contractType || item.contractId}}</span>
+                </md-autocomplete>
+                <md-chip-template>
+                    <strong ng-bind="::vm.getContractDisplayName($chip)"></strong>
+                </md-chip-template>
+            </md-chips>
+        </div>
+        <md-divider></md-divider>
+        <div layout="column">
+            <h3 class="md-title" translate="expiry_date">Expiry date</h3>
+            <md-datepicker name="expires" ng-model="vm.contract.expires" md-placeholder="Expiry date"
+                           required></md-datepicker>
+            <div ng-messages="vm.contractform.expires.$error" class="error-text">
+                <div ng-message="required" translate="this_field_is_required"></div>
+            </div>
+        </div>
+        <div>
+            <h3 class="md-title" translate="content">Content</h3>
+            <div layout="row">
+                <md-input-container style="min-width:150px;">
+                    <label translate="content_type"></label>
+                    <md-select name="contentType" ng-model="vm.contractContentType" required>
+                        <md-option ng-repeat="type in vm.contentTypes" ng-value="type.type"
+                                   ng-bind="type.label"></md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+            <md-input-container ng-if="vm.contractContentType === 'text'" class="md-block">
+                <label translate="contract_text">Contract text</label>
+                <textarea ng-model="vm.contractTextContent" type="text" name="contractContentText" rows="10"
+                          ng-required="vm.contractContentType === 'text'">
+                    </textarea>
+                <div ng-messages="vm.contractform.contractContentText.$error">
+                    <div ng-message="required" translate="this_field_is_required"></div>
+                </div>
+            </md-input-container>
+            <div ng-if="vm.contractContentType === 'image'" layout="row">
+                <div layout="column">
+                    <md-button class="md-raised md-primary" ng-click="vm.clickFileUpload()"
+                               style="margin-bottom: 0;" aria-label="{{ ::'choose_image' | translate }}">
+                        &nbsp; <i class="fa fa-picture-o"></i> <span translate="choose_image"></span>&nbsp;
+                    </md-button>
+                </div>
+                <input class="ng-hide" id="contractContentImage" type="file" accept="image/*"
+                       on-file-change="vm.selectedFileChanged" required/>
+                <div ng-bind="vm.fileError" class="error-text"></div>
+            </div>
+            <div ng-if="vm.contractContentType === 'image' && vm.contractImageContent">
+                <p translate="click_to_open_in_new_tab"></p>
+                <div ng-click="vm.openImageInTab()" class="clickable-img">
+                    <img class="clickable-img"
+                         ng-src="data:{{ ::vm.imageMimeType }};base64,{{ ::vm.contractImageContent }}"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="error-text" ng-bind="vm.validationError"></p>
+    <div layout="row">
+        <md-button class="md-warn" type="button" ng-if="!vm.isNew" ng-click="vm.deleteContract()"
+                   aria-label="{{ ::'delete_contract' | translate }}">
+            <span translate="delete_contract"></span>
+        </md-button>
+        <md-button ng-if="vm.isNew" class="md-primary" type="submit" ng-disabled="!vm.contractform.$valid"
+                   aria-label="{{ ::'create_contract' | translate }}">
+            <span translate="create_contract"></span>
+        </md-button>
+        <md-button ng-if="!vm.isNew" class="md-primary" type="submit" ng-disabled="!vm.contractform.$valid"
+                   aria-label="{{ ::'update_contract' | translate }}">
+            <span translate="update_contract"></span>
+        </md-button>
+    </div>
+</form>

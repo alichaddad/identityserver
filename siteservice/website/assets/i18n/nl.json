@@ -1,20 +1,43 @@
 {
+    "accept_contract": "Contract accepteren",
+    "acknowlegde_contract": "Accepteer contract",
     "add": "Voeg toe",
+    "add_another_party": "Voeg een andere partij toe",
     "address": "Adres",
+    "back_to_overview": "Terug naar overzicht",
     "bank_account": "Bankrekening",
     "cancel": "Annuleer",
     "change": "Wijzig",
+    "choose_image": "Kies een foto",
+    "click_to_open_in_new_tab": "Klik om in een nieuwe tab te openen",
     "closedialog": "Sluit dialoogventer",
-    "create": "Maak",
+    "content": "Inhoud",
+    "content_type": "Inhoud type",
+    "contract_expires_on_date": "Contract verloopt op {{ expire_date }}.",
+    "contract_invalidate_following_contracts": "Dit contract invalideert de volgende contracten",
+    "contract_text": "Contract tekst",
+    "contract_type": "Contract type",
+    "contract_type_optional": "Contract type (optioneel)",
+    "contracts": "Contracten",
+    "create": "Creëren",
+    "create_contract": "Contract aanmaken",
     "delete": "Verwijder",
+    "delete_contract": "Verwijder contract",
     "digital_wallet_address": "Digital wallet adres",
+    "does_contract_extend_contracts": "Verlengt dit contract enige andere contracten? Voeg deze hieronder toe.",
+    "does_contract_invalidate_contracts": "Invalideerd dit contract enige andere contracten? Voeg deze hieronder toe.",
     "email_address": "Email adres",
+    "expires_on_date": "Verloopt op {{ expire_date }}",
+    "expiry_date": "Vervaldatum",
+    "extend_contracts": "Verlengt contracten",
     "facebook_account": "Facebook account",
     "full_access": "Volledige toegang",
     "full_name": "Volledige naam",
     "github_account": "Github account",
     "invalid_label": "Ongeldig label",
+    "invalidate_contracts": "Invalideerd contarcten",
     "invalidphonenumber": "Ongeldig telefoonnummer",
+    "involved_parties": "Betrokken partijen",
     "label": "Label",
     "labelduplicate": "Dit label wordt al gebruikt",
     "labelmaxlength": "Het label kan niet langer zijn dan 50 karakters",
@@ -66,6 +89,7 @@
     "member_of_organization": "Lid van organizatie",
     "members": "Leden",
     "min_x_characters_required": "Er zijn minstens {{ length }} karakters nodig.",
+    "name": "Naam",
     "ok": "OK",
     "organization": {
         "views": {
@@ -101,7 +125,7 @@
             "createorganizationdialog": {
                 "neworg": "Nieue organizatie",
                 "createchild": "Maak een suborganizatie in {{org}}",
-                "createnew": "Maak een nieuwe organizatie",
+                "createnew": "Maak een nieuwe organizatie"
             },
             "detail": {
                 "organization": "Organizatie",
@@ -207,10 +231,12 @@
         }
     },
     "organization_name": "Naam van de organizatie",
-    "organization_name_pattern": "Ongeldige organizatie naam.<br/>Enkel tekens a-z, 0-9, streepjes,<br/>underscores en spaties zijn toegelaten"
+    "organization_name_pattern": "Ongeldige organizatie naam.<br/>Enkel tekens a-z, 0-9, streepjes,<br/>underscores en spaties zijn toegelaten",
     "organization_with_name_exists": "Er bestaat een organizatie met deze naam. Kies een andere naam.",
     "owner": "Eigenaar",
     "owners": "Eigenaars",
+    "parties": "Partijen",
+    "party_type": "Type partij",
     "phone_number": "Telefoonnummer",
     "phonenumber": "Telefoonnummer",
     "phonenumberpattern": "Ongeldig telefoonnummer. Telefoonnummer moet starten met de landcode. Voorbeeld: +32471202020",
@@ -251,6 +277,7 @@
             }
         }
     },
+    "remove": "Verwijder",
     "role": "Rol",
     "save": "Sla op",
     "shared": {
@@ -277,7 +304,9 @@
         }
     },
     "shared_information": "Gedeelde informatie",
+    "this_field_is_required": "Dit veld is verplicht",
     "update": "Pas aan",
+    "update_contract": "Contract bijwerken",
     "user": {
         "views": {
             "addressdialog": {
@@ -456,5 +485,5 @@
     "reject": "Weiger",
     "accept": "Aanvaardt",
     "username_taken": "Deze gebruikersnaam is al bezet",
-    "user_with_name_exists": "Er bestaat al een gebruiker met deze naam. Kies een andere naaam."
+    "user_with_name_exists": "Er bestaat al een gebruiker met deze naam. Kies een andere naam."
 }

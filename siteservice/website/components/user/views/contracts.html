@@ -1,0 +1,63 @@
+<div flex-gt-sm="80" flex="100" layout="column" ng-init="vm.loadContracts()">
+    <div class="breadcrumb-container">
+        <p ng-bind="::vm.username"></p>
+        <h1 translate="contracts"></h1>
+    </div>
+    <md-card>
+        <md-card-content>
+            <div class="loading-container" layout-align="center center" ng-if="!vm.loaded.contracts">
+                <md-progress-circular md-mode="indeterminate" md-diameter="50"></md-progress-circular>
+            </div>
+            <div ng-show="vm.loaded.user" flex="100" flex-gt-sm="70" flex-gt-md="50">
+                <div ng-if="vm.contractPage === vm.CONTRACT_PAGE_DETAIL">
+                    <md-button class="md-primary" ng-click="vm.showContractOverview()"
+                               aria-label="{{ ::'back_to_overview' | translate }}">
+                        <i class="fa fa-arrow-left"></i>
+                        <span translate="back_to_overview"></span>
+                    </md-button>
+                    <contract-detail contract="vm.contract" contracts="vm.contracts" contract-source-type="'user'"
+                                     contract-source="vm.user.username">
+                    </contract-detail>
+                </div>
+                <div ng-if="vm.contractPage === vm.CONTRACT_PAGE_ACK">
+                    <md-button class="md-primary" ng-click="vm.showContractOverview()"
+                               aria-label="{{ ::'back_to_overview' | translate }}">
+                        <i class="fa fa-arrow-left"></i>
+                        <span translate="back_to_overview"></span>
+                    </md-button>
+                    <contract contract="vm.contract"></contract>
+                    <div>
+                        <md-button class="md-primary md-raised" ng-click="vm.acceptContract()"
+                                   aria-label="{{ ::'accept_contract' | translate }}">
+                            <span translate="accept_contract"></span>
+                        </md-button>
+                    </div>
+                </div>
+                <div ng-if="vm.contractPage === vm.CONTRACT_PAGE_OVERVIEW">
+                    <md-button class="md-primary" ng-click="vm.showContractDetail()"
+                               aria-label="{{ ::'create_contract' | translate }}">
+                        <span translate="create_contract"></span>
+                    </md-button>
+                    <md-list>
+                        <md-list-item class="md-2-line" ng-click="vm.showContractDetail(contract)"
+                                      ng-repeat="contract in vm.contracts track by contract.contractId"
+                                      aria-label="{{ contract.contractType || contract.contractId }}">
+                            <div class="md-list-item-text">
+                                <h3>
+                                    <span ng-bind="contract.contractType || contract.contractId"></span>
+                                </h3>
+                                <p translate="expires_on_date"
+                                   translate-values="{ expire_date: vm.getDateString(contract.expires) }"></p>
+                            </div>
+                            <md-button class="md-secondary md-primary"
+                                       ng-click="vm.showAcknowledgeContract(contract)"
+                                       aria-label="{{ ::'acknowlegde_contract' | translate }}">
+                                <span translate="acknowlegde_contract"></span>
+                            </md-button>
+                        </md-list-item>
+                    </md-list>
+                </div>
+            </div>
+        </md-card-content>
+    </md-card>
+</div>

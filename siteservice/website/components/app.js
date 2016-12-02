@@ -71,6 +71,7 @@
     }
 
     function routeConfig($routeProvider) {
+        // todo translate page title
         $routeProvider
             .when('/authorize', {
                 templateUrl: 'components/user/views/authorize.html',
@@ -134,6 +135,14 @@
                 controllerAs: 'vm',
                 data: {
                     pageTitle: 'Settings'
+                }
+            })
+            .when('/contracts', {
+                templateUrl: 'components/user/views/contracts.html',
+                controller: 'UserHomeController',
+                controllerAs: 'vm',
+                data: {
+                    pageTitle: 'Contracts'
                 }
             })
             .otherwise('/profile');

@@ -422,6 +422,10 @@ types:
       type: string
       name: string
 
+  ContractContent:
+    properties:
+      mimeType: string
+      content: string
 
   Contract:
     properties:
@@ -430,7 +434,8 @@ types:
         minItems: 2
         maxItems: 20
         uniqueItems: true
-      content: string
+      content:
+        type: ContractContent
       contractType:
         type: string
         maxLength: 40

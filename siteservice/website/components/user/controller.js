@@ -7,12 +7,12 @@
         .controller("UserHomeController", UserHomeController);
 
 
-    UserHomeController.$inject = [
-        '$q', '$rootScope', '$routeParams', '$location', '$window', '$mdMedia', '$mdDialog', '$translate',
-        'NotificationService', 'OrganizationService', 'UserService', 'UserDialogService'];
+    UserHomeController.$inject = ['$q', '$rootScope', '$filter', '$location', '$window', '$mdMedia', '$mdDialog',
+        '$translate', 'NotificationService', 'OrganizationService', 'UserService', 'UserDialogService',
+        'ContractService'];
 
-    function UserHomeController($q, $rootScope, $routeParams, $location, $window, $mdMedia, $mdDialog, $translate,
-                                NotificationService, OrganizationService, UserService, UserDialogService) {
+    function UserHomeController($q, $rootScope, $filter, $location, $window, $mdMedia, $mdDialog, $translate,
+                                NotificationService, OrganizationService, UserService, UserDialogService, ContractService) {
         var vm = this;
         vm.username = $rootScope.user;
         vm.notifications = {
@@ -29,13 +29,21 @@
         var TAB_NOTIFICATIONS = 'notifications';
         var TAB_ORGANIZATIONS = 'organizations';
         var TAB_AUTHORIZATIONS = 'authorizations';
+        var TAB_CONTRACTS = 'contracts';
         var TAB_SETTINGS = 'settings';
-        var TABS = [TAB_YOU, TAB_NOTIFICATIONS, TAB_ORGANIZATIONS,TAB_AUTHORIZATIONS, TAB_SETTINGS];
+        var TABS = [TAB_YOU, TAB_NOTIFICATIONS, TAB_ORGANIZATIONS, TAB_AUTHORIZATIONS, TAB_CONTRACTS, TAB_SETTINGS];
+
+        vm.CONTRACT_PAGE_OVERVIEW = 'contract-overview';
+        vm.CONTRACT_PAGE_DETAIL = 'contract-detail';
+        vm.CONTRACT_PAGE_ACK = 'contract-ack';
+        vm.contractPage = vm.CONTRACT_PAGE_OVERVIEW;
 
         vm.owner = [];
         vm.member = [];
         vm.twoFAMethods = {};
         vm.user = {};
+        vm.contract = {};
+        vm.contracts = [];
 
         vm.loaded = {};
         vm.selectedTabIndex = 0;
@@ -43,7 +51,6 @@
 
         UserDialogService.init(vm);
 
-        /*vm.tabSelected = tabSelected;*/
         vm.pageSelected = pageSelected;
         vm.accept = accept;
         vm.reject = reject;
@@ -75,11 +82,17 @@
         vm.showSetupAuthenticatorApplication = showSetupAuthenticatorApplication;
         vm.removeAuthenticatorApplication = removeAuthenticatorApplication;
         vm.resolveMissingScopeClicked = resolveMissingScopeClicked;
+        vm.loadContracts = loadContracts;
+        vm.showContractOverview = showContractOverview;
+        vm.showContractDetail = showContractDetail;
+        vm.showAcknowledgeContract = showAcknowledgeContract;
+        vm.acceptContract = acceptContract;
+
+        vm.getDateString = getDateString;
+
         init();
 
         function init() {
-            var index = TABS.indexOf($routeParams.tab);
-            vm.selectedTabIndex = index === -1 ? 0 : index;
             loadUser().then(function () {
                 loadVerifiedPhones();
                 loadVerifiedEmails().then(loadNotifications);
@@ -118,7 +131,7 @@
                                     msg: translations['user.controller.verifiedemails'],
                                     status: 'pending'
                                 });
-                            })
+                            });
                         }
                         updatePendingNotificationsCount();
                         vm.loaded.notifications = true;
@@ -131,7 +144,7 @@
                 vm.pendingCount = getPendingCount('all');
                 vm.notificationMessage = vm.pendingCount ? '' : translations['user.controller.notifications'];
                 $rootScope.notificationCount = vm.pendingCount;
-            })
+            });
         }
 
         function loadOrganizations() {
@@ -493,7 +506,7 @@
                                 .ok(translations['user.controller.close'])
                                 .targetEvent(event)
                         );
-                    })
+                    });
                 });
         }
 
@@ -663,7 +676,7 @@
                             .ok(translations['ok'])
                             .targetEvent(event)
                     );
-                })
+                });
                 return;
             }
             $translate(['user.controller.removeauthenticator', 'user.controller.confirmremoveauthenticator', 'user.controller.yes', 'user.controller.no']).then(function(translations){
@@ -680,7 +693,7 @@
                             vm.twoFAMethods.totp = false;
                         });
                 });
-            })
+            });
         }
 
         function resolveMissingScopeClicked(event, missingScope) {
@@ -764,6 +777,43 @@
                 }
             }
         }
-    }
 
+        function loadContracts() {
+            vm.loaded.contracts = false;
+            ContractService
+                .list('users', vm.username)
+                .then(function (response) {
+                    vm.contracts = response.data;
+                    vm.loaded.contracts = true;
+                });
+        }
+
+        function showContractOverview() {
+            vm.contractPage = vm.CONTRACT_PAGE_OVERVIEW;
+        }
+
+        function showContractDetail(contract) {
+            vm.contractPage = vm.CONTRACT_PAGE_DETAIL;
+            vm.contract = contract;
+        }
+
+        function showAcknowledgeContract(contract) {
+            vm.contractPage = vm.CONTRACT_PAGE_ACK;
+            vm.contract = contract;
+        }
+
+
+        function acceptContract() {
+            ContractService.signContract(vm.contract.contractId, $rootScope.user)
+                .then(function () {
+                    vm.contractPage = vm.CONTRACT_PAGE_OVERVIEW;
+                }, function (response) {
+                    $window.location.href = 'error' + response.status;
+                });
+        }
+
+        function getDateString(date, format) {
+            return $filter('date')(date, format || 'longDate');
+        }
+    }
 })();
